@@ -1,0 +1,94 @@
+//: Playground - noun: a place where people can play
+
+import UIKit
+import Foundation
+
+
+extension Double {
+    
+    /**
+     Abbrevation type to return
+    */
+    enum abbrType{
+        case Short,Long
+    }
+    
+    /**
+     Return
+    */
+    func abbr(var Decimal:Int=1 , AbbrType:abbrType = .Short) -> String {
+        
+        // @TODO: AbbrType, Short and Long System
+        
+        var numberAbbrDict = [
+            "thousand" : "K",
+            "million" : "M",
+            "billion" : "B",
+            "trillion" : "T"
+        ];
+        
+        var str:String
+        var mod:Double
+        var modStr:String
+        
+        if self < 1000 {
+            str = String(Int(self))
+        }else if self < 1000000 {
+            mod = enforcePrecisionScale(self/1000, decimal: Decimal)
+            modStr = ( Decimal == 0 ) ? String(Int(mod)) : String(mod)
+            str = modStr + numberAbbrDict["thousand"]!
+        }else if self < 1000000000 {
+            mod = enforcePrecisionScale(self/1000000, decimal: Decimal)
+            modStr = ( Decimal == 0 ) ? String(Int(mod)) : String(mod)
+            str = modStr + numberAbbrDict["million"]!
+        }else if self < 1000000000000  {
+            mod = enforcePrecisionScale(self/1000000000, decimal: Decimal)
+            modStr = ( Decimal == 0 ) ? String(Int(mod)) : String(mod)
+            str = modStr + numberAbbrDict["billion"]!
+        }
+        else {
+            mod = enforcePrecisionScale(self/1000000000000, decimal: Decimal)
+            modStr = ( Decimal == 0 ) ? String(Int(mod)) : String(mod)
+            str = modStr + numberAbbrDict["trillion"]!
+        }
+        return str
+    }
+    
+    /**
+     Round the given value to the number of decimals provided
+     val=123.456, decimal=1  => result 123.5
+    */
+    func enforcePrecisionScale(let val:Double, var decimal:Int) -> Double {
+        
+        if decimal < 0 {
+            decimal = 0
+        }
+        
+        if decimal == 0 {
+            return Double(Int(round(val)))
+        }else{
+            let divisor = pow(10.0, Double(decimal))
+            return round(val * divisor) / divisor
+        }
+    }
+    
+    /**
+     
+    */
+    func formatString(){
+        
+    }
+}
+
+5.abbr()
+123.abbr()
+1234.abbr()
+12345.abbr()
+123456.abbr()
+1234567.abbr()
+12345678.abbr()
+123456789.abbr()
+1234567891.abbr()
+12345678912.abbr()
+123456789123.abbr()
+1234567891234.abbr(0)
